@@ -1,174 +1,157 @@
-<p float="center">
-  <img src="assets/logo2.png?raw=true" width="99.1%" />
+# MobileSAM 学习项目
+
+> **注意**: 本项目是基于 [MobileSAM](https://github.com/ChaoningZhang/MobileSAM) 的学习实现。原始优秀工作由 Chaoning Zhang 等人完成。本仓库仅用于学习目的。
+
+> **原始项目**: 请访问 MobileSAM 原始项目 https://github.com/ChaoningZhang/MobileSAM
+
+<p align="center">
+  <img src="assets/logo.png" width="99.1%" />
 </p>
 
-# Faster Segment Anything (MobileSAM) and Everything (MobileSAMv2)
-:pushpin: MobileSAMv2, available at [ResearchGate](https://www.researchgate.net/publication/376579294_MobileSAMv2_Faster_Segment_Anything_to_Everything) and [arXiv](https://arxiv.org/abs/2312.09579.pdf), replaces the grid-search prompt sampling in SAM with object-aware prompt sampling for faster **segment everything(SegEvery)**.
+## 项目概述
 
-:pushpin: MobileSAM, available at [ResearchGate](https://www.researchgate.net/publication/371851844_Faster_Segment_Anything_Towards_Lightweight_SAM_for_Mobile_Applications) and [arXiv](https://arxiv.org/pdf/2306.14289.pdf), replaces the heavyweight image encoder in SAM with a lightweight image encoder for faster **segment anything(SegAny)**. 
+本仓库包含了我对 MobileSAM (Mobile Segment Anything Model) 的学习实现。MobileSAM 是分割任意物体模型(SAM)的轻量级版本。项目主要聚焦于理解和学习其高效架构，该架构在保持性能的同时实现了更快的推理速度。
 
+学习要点：
+- 轻量级 ViT 图像编码器的实现
+- 高效的提示引导掩码解码器
+- TinyViT 的模型优化集成
+- ONNX 模型导出功能
 
-**Support for ONNX model export**. Feel free to test it on your devices and share your results with us.
+## 环境配置
 
-**A demo of MobileSAM** running on **CPU** is open at [hugging face demo](https://huggingface.co/spaces/dhkim2810/MobileSAM). On our own Mac i5 CPU, it takes around 3s. On the hugging face demo, the interface and inferior CPUs make it slower but still works fine. Stayed tuned for a new version with more features! You can also run a demo of MobileSAM on [your local PC](https://github.com/ChaoningZhang/MobileSAM/tree/master/app).
+代码要求：
+- Python >= 3.8
+- PyTorch >= 1.7
+- TorchVision >= 0.8
 
-:grapes: Media coverage and Projects that adapt from SAM to MobileSAM (Thank you all!)
-* **2023/07/03**: [joliGEN](https://github.com/jolibrain/joliGEN) supports MobileSAM for faster and lightweight mask refinement for image inpainting with Diffusion and GAN.
-* **2023/07/03**: [MobileSAM-in-the-Browser](https://github.com/akbartus/MobileSAM-in-the-Browser) shows a demo of running MobileSAM on the browser of your local PC or Mobile phone.
-* **2023/07/02**: [Inpaint-Anything](https://github.com/qiaoyu1002/Inpaint-Anything) supports MobileSAM for faster and lightweight Inpaint Anything
-* **2023/07/02**: [Personalize-SAM](https://github.com/qiaoyu1002/Personalize-SAM) supports MobileSAM for faster and lightweight Personalize Segment Anything with 1 Shot
-* **2023/07/01**: [MobileSAM-in-the-Browser](https://github.com/akbartus/MobileSAM-in-the-Browser) makes an example implementation of MobileSAM in the browser.
-* **2023/06/30**: [SegmentAnythingin3D](https://github.com/Jumpat/SegmentAnythingin3D) supports MobileSAM to segment anything in 3D efficiently.
-* **2023/06/30**: MobileSAM has been featured by [AK](https://twitter.com/_akhaliq?lang=en) for the second time, see the link [AK's MobileSAM tweet](https://twitter.com/_akhaliq/status/1674410573075718145). Welcome to retweet.
-* **2023/06/29**: [AnyLabeling](https://github.com/vietanhdev/anylabeling) supports MobileSAM for auto-labeling. 
-* **2023/06/29**: [SonarSAM](https://github.com/wangsssky/SonarSAM) supports MobileSAM for Image encoder full-finetuing. 
-* **2023/06/29**: [Stable Diffusion WebUIv](https://github.com/continue-revolution/sd-webui-segment-anything) supports MobileSAM. 
+```bash
+# 克隆仓库
+git clone https://github.com/[你的用户名]/MobileSAM-Study.git
+cd MobileSAM-Study
 
-* **2023/06/28**: [Grounding-SAM](https://github.com/IDEA-Research/Grounded-Segment-Anything) supports MobileSAM with [Grounded-MobileSAM](https://github.com/IDEA-Research/Grounded-Segment-Anything/tree/main/EfficientSAM). 
+# 创建 conda 环境
+conda create -n mobilesam python=3.8
+conda activate mobilesam
 
-* **2023/06/27**: MobileSAM has been featured by [AK](https://twitter.com/_akhaliq?lang=en), see the link [AK's MobileSAM tweet](https://twitter.com/_akhaliq/status/1673585099097636864). Welcome to retweet.
-![MobileSAM](assets/model_diagram.jpg?raw=true)
-
-:star: **How is MobileSAM trained?** MobileSAM is trained on a single GPU with 100k datasets (1% of the original images) for less than a day. The training code will be available soon.
-
-:star: **How to Adapt from SAM to MobileSAM?** Since MobileSAM keeps exactly the same pipeline as the original SAM, we inherit pre-processing, post-processing, and all other interfaces from the original SAM. Therefore, by assuming everything is exactly the same except for a smaller image encoder, those who use the original SAM for their projects can **adapt to MobileSAM with almost zero effort**.
- 
-:star: **MobileSAM performs on par with the original SAM (at least visually)** and keeps exactly the same pipeline as the original SAM except for a change on the image encoder. Specifically, we replace the original heavyweight ViT-H encoder (632M) with a much smaller Tiny-ViT (5M). On a single GPU, MobileSAM runs around 12ms per image: 8ms on the image encoder and 4ms on the mask decoder. 
-
-* The comparison of ViT-based image encoder is summarzed as follows: 
-
-    Image Encoder                                      | Original SAM | MobileSAM 
-    :-----------------------------------------:|:---------|:-----:
-    Parameters      |  611M   | 5M
-    Speed      |  452ms  | 8ms
-
-* Original SAM and MobileSAM have exactly the same prompt-guided mask decoder: 
-
-    Mask Decoder                                      | Original SAM | MobileSAM 
-    :-----------------------------------------:|:---------|:-----:
-    Parameters      |  3.876M   | 3.876M
-    Speed      |  4ms  | 4ms
-
-* The comparison of the whole pipeline is summarized as follows:
-
-    Whole Pipeline (Enc+Dec)                                      | Original SAM | MobileSAM 
-    :-----------------------------------------:|:---------|:-----:
-    Parameters      |  615M   | 9.66M
-    Speed      |  456ms  | 12ms
-
-:star: **Original SAM and MobileSAM with a point as the prompt.**  
-
-<p float="left">
-  <img src="assets/mask_point.jpg?raw=true" width="99.1%" />
-</p>
-
-:star: **Original SAM and MobileSAM with a box as the prompt.** 
-<p float="left">
-  <img src="assets/mask_box.jpg?raw=true" width="99.1%" />
-</p>
-
-:muscle: **Is MobileSAM faster and smaller than FastSAM? Yes!** 
-MobileSAM is around 7 times smaller and around 5 times faster than the concurrent FastSAM. 
-The comparison of the whole pipeline is summarzed as follows: 
-Whole Pipeline (Enc+Dec)                                      | FastSAM | MobileSAM 
-:-----------------------------------------:|:---------|:-----:
-Parameters      |  68M   | 9.66M
-Speed      |  64ms  |12ms
-
-:muscle: **Does MobileSAM aign better with the original SAM than FastSAM? Yes!** 
-FastSAM is suggested to work with multiple points, thus we compare the mIoU with two prompt points (with different pixel distances) and show the resutls as follows. Higher mIoU indicates higher alignment. 
-mIoU                                     | FastSAM | MobileSAM 
-:-----------------------------------------:|:---------|:-----:
-100      |  0.27   | 0.73
-200      |  0.33  |0.71
-300      |  0.37  |0.74
-400      |  0.41  |0.73
-500      |  0.41  |0.73
-
-
-
-
-
-
-
-
-## Installation
-
-The code requires `python>=3.8`, as well as `pytorch>=1.7` and `torchvision>=0.8`. Please follow the instructions [here](https://pytorch.org/get-started/locally/) to install both PyTorch and TorchVision dependencies. Installing both PyTorch and TorchVision with CUDA support is strongly recommended.
-
-Install Mobile Segment Anything:
-
-```
-pip install git+https://github.com/ChaoningZhang/MobileSAM.git
+# 安装依赖
+pip install torch torchvision
+pip install -r requirements.txt
 ```
 
-or clone the repository locally and install with
+## 基本使用
 
-```
-git clone git@github.com:ChaoningZhang/MobileSAM.git
-cd MobileSAM; pip install -e .
-```
+以下是模型使用的简单示例：
 
-## Demo
+```python
+from mobile_sam import sam_model_registry, SamPredictor
 
-Once installed MobileSAM, you can run demo on your local PC or check out our [HuggingFace Demo](https://huggingface.co/spaces/dhkim2810/MobileSAM).
-
-It requires latest version of [gradio](https://gradio.app).
-
-```
-cd app
-python app.py
-```
-
-## <a name="GettingStarted"></a>Getting Started
-The MobileSAM can be loaded in the following ways:
-
-```
-from mobile_sam import sam_model_registry, SamAutomaticMaskGenerator, SamPredictor
-
+# 加载模型
 model_type = "vit_t"
 sam_checkpoint = "./weights/mobile_sam.pt"
-
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 mobile_sam = sam_model_registry[model_type](checkpoint=sam_checkpoint)
 mobile_sam.to(device=device)
 mobile_sam.eval()
 
+# 创建预测器
 predictor = SamPredictor(mobile_sam)
-predictor.set_image(<your_image>)
-masks, _, _ = predictor.predict(<input_prompts>)
+
+# 设置图像并预测
+predictor.set_image(your_image)
+masks, _, _ = predictor.predict(your_prompts)
 ```
 
-or generate masks for an entire image:
+## 模型架构分析
 
+模型主要包含两个组件：
+
+1. 图像编码器 (轻量级 ViT)
+   - 参数量：5M
+   - 推理时间：约 8ms
+   - 基于 TinyViT 架构
+
+2. 掩码解码器
+   - 参数量：3.876M
+   - 推理时间：约 4ms
+   - 与原始 SAM 相同的架构
+
+整体性能：
+- 总参数量：9.66M
+- 总推理时间：约 12ms
+
+<p align="center">
+  <img src="assets/model_diagram.jpg" width="99.1%" />
+</p>
+
+## 实验和学习笔记
+
+在这个学习项目中，我主要关注：
+1. 高效架构设计
+2. 模型大小和性能之间的权衡
+3. 轻量级图像编码器的实现细节
+4. 移动端部署的集成策略
+
+主要学习收获：
+- 模型优化技术
+- 高效实现实践
+- 移动端友好的架构考虑
+- 性能基准测试方法
+
+## 实验结果展示
+
+使用点提示的分割结果：
+<p align="center">
+  <img src="assets/mask_point.jpg" width="99.1%" />
+</p>
+
+使用框提示的分割结果：
+<p align="center">
+  <img src="assets/mask_box.jpg" width="99.1%" />
+</p>
+
+## 演示应用
+
+本地运行演示：
+
+```bash
+cd app
+python app.py
 ```
-from mobile_sam import SamAutomaticMaskGenerator
 
-mask_generator = SamAutomaticMaskGenerator(mobile_sam)
-masks = mask_generator.generate(<your_image>)
-```
-## <a name="GettingStarted"></a>Getting Started (MobileSAMv2)
-Download the model weights from the [checkpoints](https://drive.google.com/file/d/1dE-YAG-1mFCBmao2rHDp0n-PP4eH7SjE/view?usp=sharing).
+演示支持：
+- 图像上传
+- 点和框提示
+- 实时分割可视化
 
-After downloading the model weights, faster SegEvery with MobileSAMv2 can be simply used as follows:
-```
-cd MobileSAMv2
-bash ./experiments/mobilesamv2.sh
-```
-## ONNX Export
-**MobileSAM** now supports ONNX export. Export the model with
+## ONNX模型导出
 
-```
-python scripts/export_onnx_model.py --checkpoint ./weights/mobile_sam.pt --model-type vit_t --output ./mobile_sam.onnx
+支持导出ONNX格式的模型：
+
+```bash
+python scripts/export_onnx_model.py \
+    --checkpoint ./weights/mobile_sam.pt \
+    --model-type vit_t \
+    --output ./mobile_sam.onnx
 ```
 
-Also check the [example notebook](https://github.com/ChaoningZhang/MobileSAM/blob/master/notebooks/onnx_model_example.ipynb) to follow detailed steps.
-We recommend to use `onnx==1.12.0` and `onnxruntime==1.13.1` which is tested.
+## 参与贡献
 
+虽然这主要是一个学习项目，但欢迎讨论和建议：
+- 提出问题或讨论
+- 提交改进建议
+- 分享学习经验
 
-## BibTex of our MobileSAM
-If you use MobileSAM in your research, please use the following BibTeX entry. :mega: Thank you!
+## 致谢
+
+本学习项目基于以下优秀工作：
+
+- 原始 [MobileSAM](https://github.com/ChaoningZhang/MobileSAM) 项目
+- [Segment Anything Model (SAM)](https://github.com/facebookresearch/segment-anything)
+- [TinyViT](https://github.com/microsoft/Cream/tree/main/TinyViT)
+
+如果您觉得有帮助，请引用原始工作：
 
 ```bibtex
 @article{mobile_sam,
@@ -179,15 +162,6 @@ If you use MobileSAM in your research, please use the following BibTeX entry. :m
 }
 ```
 
-## Acknowledgement
-
-This work was supported by Institute of Information & communications Technology Planning & Evaluation (IITP) grant funded by the Korea government(MSIT) (No.RS-2022-00155911, Artificial Intelligence Convergence Innovation Human Resources Development (Kyung Hee University))
-
-<details>
-<summary>
-<a href="https://github.com/facebookresearch/segment-anything">SAM</a> (Segment Anything) [<b>bib</b>]
-</summary>
-
 ```bibtex
 @article{kirillov2023segany,
   title={Segment Anything}, 
@@ -196,14 +170,6 @@ This work was supported by Institute of Information & communications Technology 
   year={2023}
 }
 ```
-</details>
-
-
-
-<details>
-<summary>
-<a href="https://github.com/microsoft/Cream/tree/main/TinyViT">TinyViT</a> (TinyViT: Fast Pretraining Distillation for Small Vision Transformers) [<b>bib</b>]
-</summary>
 
 ```bibtex
 @InProceedings{tiny_vit,
@@ -211,9 +177,9 @@ This work was supported by Institute of Information & communications Technology 
   author={Wu, Kan and Zhang, Jinnian and Peng, Houwen and Liu, Mengchen and Xiao, Bin and Fu, Jianlong and Yuan, Lu},
   booktitle={European conference on computer vision (ECCV)},
   year={2022}
+}
 ```
-</details>
 
+## 许可证
 
-
-
+本项目仅用于学习和教育目的。任何商业用途，请参考原始 [MobileSAM](https://github.com/ChaoningZhang/MobileSAM) 项目及其许可证。
