@@ -1,80 +1,219 @@
-# 深度学习两个月学习计划（2024年10月9日 - 2024年12月9日）
+<p float="center">
+  <img src="assets/logo2.png?raw=true" width="99.1%" />
+</p>
 
-## 每周学习计划
+# Faster Segment Anything (MobileSAM) and Everything (MobileSAMv2)
+:pushpin: MobileSAMv2, available at [ResearchGate](https://www.researchgate.net/publication/376579294_MobileSAMv2_Faster_Segment_Anything_to_Everything) and [arXiv](https://arxiv.org/abs/2312.09579.pdf), replaces the grid-search prompt sampling in SAM with object-aware prompt sampling for faster **segment everything(SegEvery)**.
 
-| 周数 | 日期          | 主题              | 子主题                                                       | 项目/练习                        |
-| ---- | ------------- | ----------------- | ------------------------------------------------------------ | -------------------------------- |
-| 1    | 10/09 - 10/15 | 深度学习基础      | 1. 神经网络基本概念<br>2. 反向传播算法<br>3. 激活函数和损失函数 | 使用NumPy实现简单的前馈神经网络  |
-| 2    | 10/16 - 10/22 | PyTorch基础       | 1. PyTorch张量操作<br>2. 自动求导机制<br>3. 数据加载和预处理 | 用PyTorch重构第一周的神经网络    |
-| 3    | 10/23 - 10/29 | 卷积神经网络(CNN) | 1. CNN架构<br>2. 卷积和池化操作<br>3. 经典CNN模型(VGG, ResNet) | 实现图像分类器（CIFAR-10数据集） |
-| 4    | 10/30 - 11/05 | 循环神经网络(RNN) | 1. RNN基本概念<br>2. LSTM和GRU<br>3. 序列建模                | 实现文本情感分析模型             |
-| 5    | 11/06 - 11/12 | 自然语言处理基础  | 1. 词嵌入(Word2Vec, GloVe)<br>2. 序列到序列模型<br>3. 注意力机制 | 构建简单的机器翻译系统           |
-| 6    | 11/13 - 11/19 | 生成对抗网络(GAN) | 1. GAN原理<br>2. DCGAN<br>3. 条件GAN                         | 实现手写数字生成器               |
-| 7    | 11/20 - 11/26 | 强化学习入门      | 1. 强化学习基本概念<br>2. Q-learning<br>3. 深度Q网络(DQN)    | 训练AI玩简单的游戏(如CartPole)   |
-| 8    | 11/27 - 12/03 | 高级主题          | 1. 迁移学习<br>2. 模型压缩和量化<br>3. 神经网络可解释性      | 使用迁移学习进行图像分类         |
-| 9    | 12/04 - 12/09 | 项目实践          | 1. 项目设计与规划<br>2. 模型开发与训练<br>3. 评估与优化      | 完成一个综合性深度学习项目       |
+:pushpin: MobileSAM, available at [ResearchGate](https://www.researchgate.net/publication/371851844_Faster_Segment_Anything_Towards_Lightweight_SAM_for_Mobile_Applications) and [arXiv](https://arxiv.org/pdf/2306.14289.pdf), replaces the heavyweight image encoder in SAM with a lightweight image encoder for faster **segment anything(SegAny)**. 
 
-## 每日任务跟踪表（示例：第一周）
 
-| 日期  | 子主题             | 学习内容               | 编程练习             | 完成情况 | 用时(小时) | 难点/收获 |
-| ----- | ------------------ | ---------------------- | -------------------- | -------- | ---------- | --------- |
-| 10/09 | 神经网络基本概念   | 神经元模型，网络架构   | 实现单个神经元       | [ ]      |            |           |
-| 10/10 | 神经网络基本概念   | 前向传播               | 实现简单的前向传播   | [ ]      |            |           |
-| 10/11 | 反向传播算法       | 链式法则，梯度下降     | 手动计算梯度         | [ ]      |            |           |
-| 10/12 | 反向传播算法       | 实现反向传播           | 编写反向传播算法     | [ ]      |            |           |
-| 10/13 | 激活函数和损失函数 | 常见激活函数和损失函数 | 实现不同的激活函数   | [ ]      |            |           |
-| 10/14 | 激活函数和损失函数 | 选择合适的函数         | 比较不同函数的效果   | [ ]      |            |           |
-| 10/15 | 周回顾             | 复习本周内容           | 完成简单神经网络项目 | [ ]      |            |           |
+**Support for ONNX model export**. Feel free to test it on your devices and share your results with us.
 
-## 学习进度跟踪表
+**A demo of MobileSAM** running on **CPU** is open at [hugging face demo](https://huggingface.co/spaces/dhkim2810/MobileSAM). On our own Mac i5 CPU, it takes around 3s. On the hugging face demo, the interface and inferior CPUs make it slower but still works fine. Stayed tuned for a new version with more features! You can also run a demo of MobileSAM on [your local PC](https://github.com/ChaoningZhang/MobileSAM/tree/master/app).
 
-| 主题         | 重要概念              | 掌握度(1-5) | 需要复习的点 | 相关项目/练习 | 资源/笔记 |
-| ------------ | --------------------- | ----------- | ------------ | ------------- | --------- |
-| 深度学习基础 | 神经网络,反向传播     |             |              |               |           |
-| PyTorch基础  | 张量,自动求导         |             |              |               |           |
-| CNN          | 卷积,池化,经典模型    |             |              |               |           |
-| RNN          | LSTM,GRU,序列建模     |             |              |               |           |
-| NLP基础      | 词嵌入,Seq2Seq,注意力 |             |              |               |           |
-| GAN          | 生成器,判别器         |             |              |               |           |
-| 强化学习     | Q-learning,DQN        |             |              |               |           |
-| 高级主题     | 迁移学习,模型压缩     |             |              |               |           |
+:grapes: Media coverage and Projects that adapt from SAM to MobileSAM (Thank you all!)
+* **2023/07/03**: [joliGEN](https://github.com/jolibrain/joliGEN) supports MobileSAM for faster and lightweight mask refinement for image inpainting with Diffusion and GAN.
+* **2023/07/03**: [MobileSAM-in-the-Browser](https://github.com/akbartus/MobileSAM-in-the-Browser) shows a demo of running MobileSAM on the browser of your local PC or Mobile phone.
+* **2023/07/02**: [Inpaint-Anything](https://github.com/qiaoyu1002/Inpaint-Anything) supports MobileSAM for faster and lightweight Inpaint Anything
+* **2023/07/02**: [Personalize-SAM](https://github.com/qiaoyu1002/Personalize-SAM) supports MobileSAM for faster and lightweight Personalize Segment Anything with 1 Shot
+* **2023/07/01**: [MobileSAM-in-the-Browser](https://github.com/akbartus/MobileSAM-in-the-Browser) makes an example implementation of MobileSAM in the browser.
+* **2023/06/30**: [SegmentAnythingin3D](https://github.com/Jumpat/SegmentAnythingin3D) supports MobileSAM to segment anything in 3D efficiently.
+* **2023/06/30**: MobileSAM has been featured by [AK](https://twitter.com/_akhaliq?lang=en) for the second time, see the link [AK's MobileSAM tweet](https://twitter.com/_akhaliq/status/1674410573075718145). Welcome to retweet.
+* **2023/06/29**: [AnyLabeling](https://github.com/vietanhdev/anylabeling) supports MobileSAM for auto-labeling. 
+* **2023/06/29**: [SonarSAM](https://github.com/wangsssky/SonarSAM) supports MobileSAM for Image encoder full-finetuing. 
+* **2023/06/29**: [Stable Diffusion WebUIv](https://github.com/continue-revolution/sd-webui-segment-anything) supports MobileSAM. 
 
-## 项目开发跟踪（最后一周）
+* **2023/06/28**: [Grounding-SAM](https://github.com/IDEA-Research/Grounded-Segment-Anything) supports MobileSAM with [Grounded-MobileSAM](https://github.com/IDEA-Research/Grounded-Segment-Anything/tree/main/EfficientSAM). 
 
-| 日期  | 项目进展 | 完成的功能 | 遇到的挑战 | 解决方案 | 下一步计划 |
-| ----- | -------- | ---------- | ---------- | -------- | ---------- |
-| 12/04 |          |            |            |          |            |
-| 12/05 |          |            |            |          |            |
-| 12/06 |          |            |            |          |            |
-| 12/07 |          |            |            |          |            |
-| 12/08 |          |            |            |          |            |
-| 12/09 |          |            |            |          |            |
+* **2023/06/27**: MobileSAM has been featured by [AK](https://twitter.com/_akhaliq?lang=en), see the link [AK's MobileSAM tweet](https://twitter.com/_akhaliq/status/1673585099097636864). Welcome to retweet.
+![MobileSAM](assets/model_diagram.jpg?raw=true)
 
-## 使用说明
+:star: **How is MobileSAM trained?** MobileSAM is trained on a single GPU with 100k datasets (1% of the original images) for less than a day. The training code will be available soon.
 
-1. 每周学习计划：
-   - 每周专注于一个主要深度学习主题
-   - 平均每个子主题分配1-2天时间
-   - 每周末进行项目实践，应用所学知识
+:star: **How to Adapt from SAM to MobileSAM?** Since MobileSAM keeps exactly the same pipeline as the original SAM, we inherit pre-processing, post-processing, and all other interfaces from the original SAM. Therefore, by assuming everything is exactly the same except for a smaller image encoder, those who use the original SAM for their projects can **adapt to MobileSAM with almost zero effort**.
+ 
+:star: **MobileSAM performs on par with the original SAM (at least visually)** and keeps exactly the same pipeline as the original SAM except for a change on the image encoder. Specifically, we replace the original heavyweight ViT-H encoder (632M) with a much smaller Tiny-ViT (5M). On a single GPU, MobileSAM runs around 12ms per image: 8ms on the image encoder and 4ms on the mask decoder. 
 
-2. 每日任务跟踪：
-   - 参照第一周的格式，为每周制定详细的每日计划
-   - 记录每项任务的完成情况和所用时间
-   - 注意记录学习过程中的难点和收获
+* The comparison of ViT-based image encoder is summarzed as follows: 
 
-3. 学习进度跟踪：
-   - 每周末更新进度表，评估各主题的掌握程度
-   - 标注需要进一步巩固的概念
-   - 记录有用的学习资源和个人笔记
+    Image Encoder                                      | Original SAM | MobileSAM 
+    :-----------------------------------------:|:---------|:-----:
+    Parameters      |  611M   | 5M
+    Speed      |  452ms  | 8ms
 
-4. 项目开发（最后一周）：
-   - 选择一个综合性的深度学习项目，应用前八周所学知识
-   - 每天记录项目进展，包括完成的功能和遇到的挑战
-   - 思考如何将学到的深度学习技术应用到实际问题中
+* Original SAM and MobileSAM have exactly the same prompt-guided mask decoder: 
 
-5. 学习建议：
-   - 保持每日学习习惯，建议每天投入至少3-4小时
-   - 理论学习与编程实践并重
-   - 使用Google Colab或本地GPU进行模型训练
-   - 积极参与深度学习社区，如Reddit r/MachineLearning或GitHub
-   - 阅读和复现经
+    Mask Decoder                                      | Original SAM | MobileSAM 
+    :-----------------------------------------:|:---------|:-----:
+    Parameters      |  3.876M   | 3.876M
+    Speed      |  4ms  | 4ms
+
+* The comparison of the whole pipeline is summarized as follows:
+
+    Whole Pipeline (Enc+Dec)                                      | Original SAM | MobileSAM 
+    :-----------------------------------------:|:---------|:-----:
+    Parameters      |  615M   | 9.66M
+    Speed      |  456ms  | 12ms
+
+:star: **Original SAM and MobileSAM with a point as the prompt.**  
+
+<p float="left">
+  <img src="assets/mask_point.jpg?raw=true" width="99.1%" />
+</p>
+
+:star: **Original SAM and MobileSAM with a box as the prompt.** 
+<p float="left">
+  <img src="assets/mask_box.jpg?raw=true" width="99.1%" />
+</p>
+
+:muscle: **Is MobileSAM faster and smaller than FastSAM? Yes!** 
+MobileSAM is around 7 times smaller and around 5 times faster than the concurrent FastSAM. 
+The comparison of the whole pipeline is summarzed as follows: 
+Whole Pipeline (Enc+Dec)                                      | FastSAM | MobileSAM 
+:-----------------------------------------:|:---------|:-----:
+Parameters      |  68M   | 9.66M
+Speed      |  64ms  |12ms
+
+:muscle: **Does MobileSAM aign better with the original SAM than FastSAM? Yes!** 
+FastSAM is suggested to work with multiple points, thus we compare the mIoU with two prompt points (with different pixel distances) and show the resutls as follows. Higher mIoU indicates higher alignment. 
+mIoU                                     | FastSAM | MobileSAM 
+:-----------------------------------------:|:---------|:-----:
+100      |  0.27   | 0.73
+200      |  0.33  |0.71
+300      |  0.37  |0.74
+400      |  0.41  |0.73
+500      |  0.41  |0.73
+
+
+
+
+
+
+
+
+## Installation
+
+The code requires `python>=3.8`, as well as `pytorch>=1.7` and `torchvision>=0.8`. Please follow the instructions [here](https://pytorch.org/get-started/locally/) to install both PyTorch and TorchVision dependencies. Installing both PyTorch and TorchVision with CUDA support is strongly recommended.
+
+Install Mobile Segment Anything:
+
+```
+pip install git+https://github.com/ChaoningZhang/MobileSAM.git
+```
+
+or clone the repository locally and install with
+
+```
+git clone git@github.com:ChaoningZhang/MobileSAM.git
+cd MobileSAM; pip install -e .
+```
+
+## Demo
+
+Once installed MobileSAM, you can run demo on your local PC or check out our [HuggingFace Demo](https://huggingface.co/spaces/dhkim2810/MobileSAM).
+
+It requires latest version of [gradio](https://gradio.app).
+
+```
+cd app
+python app.py
+```
+
+## <a name="GettingStarted"></a>Getting Started
+The MobileSAM can be loaded in the following ways:
+
+```
+from mobile_sam import sam_model_registry, SamAutomaticMaskGenerator, SamPredictor
+
+model_type = "vit_t"
+sam_checkpoint = "./weights/mobile_sam.pt"
+
+device = "cuda" if torch.cuda.is_available() else "cpu"
+
+mobile_sam = sam_model_registry[model_type](checkpoint=sam_checkpoint)
+mobile_sam.to(device=device)
+mobile_sam.eval()
+
+predictor = SamPredictor(mobile_sam)
+predictor.set_image(<your_image>)
+masks, _, _ = predictor.predict(<input_prompts>)
+```
+
+or generate masks for an entire image:
+
+```
+from mobile_sam import SamAutomaticMaskGenerator
+
+mask_generator = SamAutomaticMaskGenerator(mobile_sam)
+masks = mask_generator.generate(<your_image>)
+```
+## <a name="GettingStarted"></a>Getting Started (MobileSAMv2)
+Download the model weights from the [checkpoints](https://drive.google.com/file/d/1dE-YAG-1mFCBmao2rHDp0n-PP4eH7SjE/view?usp=sharing).
+
+After downloading the model weights, faster SegEvery with MobileSAMv2 can be simply used as follows:
+```
+cd MobileSAMv2
+bash ./experiments/mobilesamv2.sh
+```
+## ONNX Export
+**MobileSAM** now supports ONNX export. Export the model with
+
+```
+python scripts/export_onnx_model.py --checkpoint ./weights/mobile_sam.pt --model-type vit_t --output ./mobile_sam.onnx
+```
+
+Also check the [example notebook](https://github.com/ChaoningZhang/MobileSAM/blob/master/notebooks/onnx_model_example.ipynb) to follow detailed steps.
+We recommend to use `onnx==1.12.0` and `onnxruntime==1.13.1` which is tested.
+
+
+## BibTex of our MobileSAM
+If you use MobileSAM in your research, please use the following BibTeX entry. :mega: Thank you!
+
+```bibtex
+@article{mobile_sam,
+  title={Faster Segment Anything: Towards Lightweight SAM for Mobile Applications},
+  author={Zhang, Chaoning and Han, Dongshen and Qiao, Yu and Kim, Jung Uk and Bae, Sung-Ho and Lee, Seungkyu and Hong, Choong Seon},
+  journal={arXiv preprint arXiv:2306.14289},
+  year={2023}
+}
+```
+
+## Acknowledgement
+
+This work was supported by Institute of Information & communications Technology Planning & Evaluation (IITP) grant funded by the Korea government(MSIT) (No.RS-2022-00155911, Artificial Intelligence Convergence Innovation Human Resources Development (Kyung Hee University))
+
+<details>
+<summary>
+<a href="https://github.com/facebookresearch/segment-anything">SAM</a> (Segment Anything) [<b>bib</b>]
+</summary>
+
+```bibtex
+@article{kirillov2023segany,
+  title={Segment Anything}, 
+  author={Kirillov, Alexander and Mintun, Eric and Ravi, Nikhila and Mao, Hanzi and Rolland, Chloe and Gustafson, Laura and Xiao, Tete and Whitehead, Spencer and Berg, Alexander C. and Lo, Wan-Yen and Doll{\'a}r, Piotr and Girshick, Ross},
+  journal={arXiv:2304.02643},
+  year={2023}
+}
+```
+</details>
+
+
+
+<details>
+<summary>
+<a href="https://github.com/microsoft/Cream/tree/main/TinyViT">TinyViT</a> (TinyViT: Fast Pretraining Distillation for Small Vision Transformers) [<b>bib</b>]
+</summary>
+
+```bibtex
+@InProceedings{tiny_vit,
+  title={TinyViT: Fast Pretraining Distillation for Small Vision Transformers},
+  author={Wu, Kan and Zhang, Jinnian and Peng, Houwen and Liu, Mengchen and Xiao, Bin and Fu, Jianlong and Yuan, Lu},
+  booktitle={European conference on computer vision (ECCV)},
+  year={2022}
+```
+</details>
+
+
+
+
